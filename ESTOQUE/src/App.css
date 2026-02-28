@@ -1,0 +1,423 @@
+:root {
+  /* Default to dark theme */
+  --background-color: #121212;
+  --text-color: #e9e9e9;
+  --header-bg: #1E1E1E;
+  --card-bg: #1E1E1E;
+  --card-border: #333;
+  --shadow-color: rgba(0,0,0,0.4);
+  --primary-color: #1E5631; /* Dark Green */
+  --primary-text: #ffffff;
+  --nav-link-color: #e9e9e9;
+}
+
+[data-theme='light'] {
+  --background-color: #f4f4f9;
+  --text-color: #333;
+  --header-bg: #fff;
+  --card-bg: #fff;
+  --card-border: #ddd;
+  --shadow-color: rgba(0,0,0,0.1);
+  --primary-color: #1E5631; /* Dark Green */
+  --primary-text: #ffffff;
+  --nav-link-color: #555;
+}
+
+[data-theme='dark'] {
+  --background-color: #121212;
+  --text-color: #e9e9e9;
+  --header-bg: #1E1E1E;
+  --card-bg: #1E1E1E;
+  --card-border: #333;
+  --shadow-color: rgba(0,0,0,0.4);
+  --primary-color: #1E5631; /* Dark Green */
+  --primary-text: #ffffff;
+  --nav-link-color: #e9e9e9;
+}
+
+/* General Body Styles */
+body {
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  margin: 0;
+  background-color: var(--background-color);
+  color: var(--text-color);
+  transition: background-color 0.3s, color 0.3s;
+}
+
+#root {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+}
+
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 2rem;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+/* Header and Navigation */
+header {
+  background-color: var(--header-bg);
+  box-shadow: 0 2px 4px var(--shadow-color);
+  padding: 1rem 0;
+  transition: background-color 0.3s;
+}
+
+nav {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.theme-toggle-button {
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  font-size: 1.5rem;
+  padding: 0;
+  color: var(--text-color);
+}
+
+nav .logo-link {
+  font-weight: bold;
+  font-size: 1.5rem;
+  color: var(--text-color);
+  text-decoration: none;
+}
+
+.nav-right {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+}
+
+nav ul {
+  list-style: none;
+  display: flex;
+  gap: 1rem;
+  margin: 0;
+  padding: 0;
+  align-items: center;
+}
+
+nav a {
+  text-decoration: none;
+  color: var(--nav-link-color);
+  padding: 0.5rem 1rem;
+  border-radius: 5px;
+  transition: background-color 0.3s, color 0.3s;
+}
+
+nav a:hover, nav a.active {
+  background-color: var(--primary-color);
+  color: var(--primary-text);
+}
+
+/* Main Content */
+main {
+  flex: 1;
+  padding: 2rem 0;
+}
+
+/* Product Grid */
+.product-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 1.5rem;
+}
+
+.product-card {
+  background-color: var(--card-bg);
+  border: 1px solid var(--card-border);
+  border-radius: 8px;
+  box-shadow: 0 1px 3px var(--shadow-color);
+  padding: 1rem;
+  text-align: center;
+  transition: transform 0.2s, box-shadow 0.2s, background-color 0.3s;
+  color: inherit;
+  text-decoration: none;
+}
+
+.product-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 4px 10px var(--shadow-color);
+}
+
+.product-card img {
+  max-width: 100%;
+  height: 150px;
+  object-fit: cover;
+  border-radius: 5px;
+  margin-bottom: 1rem;
+}
+
+.product-card h2 {
+  font-size: 1.1rem;
+  margin: 0.5rem 0;
+}
+
+.product-card p {
+  font-size: 1rem;
+  color: var(--primary-color);
+  font-weight: bold;
+}
+
+/* Login Page Styles */
+.login-page {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex: 1; /* Take up remaining vertical space */
+  padding: 1rem;
+}
+
+.login-container {
+  background-color: var(--card-bg);
+  padding: 2.5rem;
+  border-radius: 10px;
+  box-shadow: 0 4px 12px var(--shadow-color);
+  width: 100%;
+  max-width: 400px;
+  text-align: center;
+}
+
+.login-container h2 {
+    font-size: 2rem;
+    margin-bottom: 1.5rem;
+    font-weight: bold;
+    text-transform: uppercase;
+}
+
+.login-container form {
+    margin: 0;
+    padding: 0;
+    box-shadow: none;
+    background: none;
+}
+
+.form-group {
+  margin-bottom: 1.5rem;
+  text-align: left;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 0.5rem;
+  font-weight: 600;
+}
+
+.form-group input {
+  width: 100%;
+  padding: 0.8rem;
+  border: 1px solid var(--card-border);
+  background-color: var(--background-color);
+  color: var(--text-color);
+  border-radius: 5px;
+  box-sizing: border-box; /* Important */
+}
+
+.login-button {
+  width: 100%;
+  padding: 0.9rem;
+  border: none;
+  background-color: var(--primary-color);
+  color: var(--primary-text);
+  border-radius: 5px;
+  font-size: 1.1rem;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+
+.login-button:hover {
+  opacity: 0.9;
+}
+
+/* Item Details */
+.item-details-container {
+  background-color: var(--card-bg);
+  padding: 2rem;
+  border-radius: 8px;
+  box-shadow: 0 2px 5px var(--shadow-color);
+  display: flex;
+  gap: 2rem;
+}
+
+.item-details-image {
+  flex: 1;
+}
+
+.item-details-image img {
+  width: 100%;
+  border-radius: 5px;
+}
+
+.item-details-info {
+  flex: 1;
+  text-align: left;
+}
+
+/* Dashboard */
+.recharts-responsive-container {
+  background-color: var(--card-bg);
+  padding: 1rem;
+  border-radius: 8px;
+  box-shadow: 0 2px 5px var(--shadow-color);
+}
+
+.recharts-tooltip-wrapper {
+    background: var(--background-color) !important;
+    border: 1px solid var(--card-border) !important;
+}
+
+.custom-recharts-tooltip {
+  background-color: var(--background-color);
+  border: 1px solid var(--card-border);
+  padding: 10px;
+  border-radius: 5px;
+  box-shadow: 0 2px 5px var(--shadow-color);
+}
+
+.recharts-label {
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+
+/* Tooltip item styles to avoid inline styles */
+.custom-tooltip-item {
+  margin-bottom: 6px;
+}
+.tooltip-saidas {
+  color: #1E5631; /* same as Bar fill for saidas */
+}
+.tooltip-entradas {
+  color: #808080; /* same as Bar fill for entradas */
+}
+
+/* Profit Display */
+.profit-display {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.profit-display .blurred-text {
+  filter: blur(5px);
+  transition: filter 0.3s ease-in-out;
+}
+
+.profit-display:hover .blurred-text,
+.profit-display .blurred-text:hover {
+    filter: blur(0);
+}
+
+.visibility-toggle {
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  font-size: 1.2rem;
+  padding: 0;
+  color: var(--text-color);
+}
+
+/* Footer */
+footer {
+  padding: 1.5rem 0;
+  background-color: var(--primary-color); /* Changed to primary color (green) */
+  box-shadow: 0 -2px 4px var(--shadow-color);
+  margin-top: auto;
+  transition: background-color 0.3s;
+}
+
+.footer-content {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.footer-title {
+  font-family: 'Montserrat', sans-serif;
+  font-weight: bold;
+  font-size: 2rem;
+  margin: 0;
+}
+
+.footer-info {
+  text-align: right;
+}
+
+.footer-info p {
+  border: 1px solid var(--card-border);
+  padding: 0.5rem 1rem;
+  margin: 0.25rem 0;
+  border-radius: 4px;
+  font-size: 0.9rem;
+  background-color: var(--background-color);
+  transition: transform 0.2s ease-in-out;
+}
+
+.footer-info p:hover {
+  transform: scale(1.05);
+}
+
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .container {
+    padding: 0 1rem;
+  }
+  
+  nav {
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  .nav-right {
+    flex-direction: column;
+    gap: 1rem;
+  }
+
+  nav ul {
+    flex-direction: column;
+    width: 100%;
+    text-align: center;
+  }
+
+  .item-details-container {
+    flex-direction: column;
+  }
+
+  .footer-content {
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+
+  .footer-info {
+    text-align: center;
+  }
+}
+
+@media (max-width: 480px) {
+  .product-grid {
+    grid-template-columns: 1fr;
+  }
+
+  nav .logo-link {
+    margin-bottom: 1rem;
+  }
+
+  nav ul {
+    gap: 0.5rem;
+  }
+
+  nav a {
+    padding: 0.8rem 0.5rem;
+  }
+}

@@ -1,0 +1,94 @@
+/* src/pages/AddItemPage.css */
+
+.add-item-container {
+  max-width: 600px;
+  margin: 2rem auto;
+  padding: 2rem;
+  background-color: var(--button-bg-color); /* Use a slightly different bg for contrast */
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.add-item-container h1 {
+  text-align: center;
+  color: var(--text-color);
+  margin-bottom: 2rem;
+}
+
+.add-item-form .form-group {
+  margin-bottom: 1.5rem;
+}
+
+.add-item-form label {
+  display: block;
+  margin-bottom: 0.5rem;
+  font-weight: 500;
+  color: var(--text-color);
+}
+
+.add-item-form input,
+.add-item-form textarea {
+  width: 100%;
+  padding: 0.8rem;
+  border-radius: 4px;
+  border: 1px solid #555; /* A bit darker border */
+  background-color: #333; /* Darker input background */
+  color: var(--text-color);
+  font-size: 1rem;
+  box-sizing: border-box; /* Important for width: 100% */
+}
+
+/* Style file input specifically */
+.add-item-form input[type="file"] {
+  background-color: transparent;
+  border: none;
+  padding: 0;
+}
+
+.add-item-form input:focus,
+.add-item-form textarea:focus {
+  outline: none;
+  border-color: var(--accent-color);
+  box-shadow: 0 0 0 2px var(--accent-color-hover);
+}
+
+.add-item-form textarea {
+  min-height: 100px;
+  resize: vertical;
+}
+
+.form-actions {
+  text-align: center;
+  margin-top: 2rem;
+}
+
+.submit-btn {
+  background-color: var(--accent-color);
+  color: #fff;
+  border: none;
+  padding: 0.8rem 2rem;
+  font-size: 1.1rem;
+  font-weight: bold;
+  cursor: pointer;
+  border-radius: 8px;
+  transition: background-color 0.3s;
+}
+
+.submit-btn:hover {
+  background-color: var(--accent-color-hover);
+  border-color: var(--accent-color-hover);
+}
+
+.image-preview {
+  text-align: center;
+}
+
+.image-preview img {
+  max-width: 200px;
+  margin-top: 10px;
+  border-radius: 4px;
+}
+
+.update-price-btn {
+  margin-left: 10px;
+}
