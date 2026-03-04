@@ -19,11 +19,23 @@ export const saveOrder = async (orderData: OrderPayload) => {
     });
 
     if (!response.ok) {
-      const errorData = await response.json();
-      throw new Error(errorData.message || 'Failed to save order');
+      const contentType = response.headers.get('content-type');
+      let errorData;
+      if (contentType && contentType.includes('application/json')) {
+        errorData = await response.json();
+      }
+      throw new Error(
+        errorData?.message || `Failed to save order: ${response.statusText}`
+      );
     }
 
-    return await response.json();
+    const contentType = response.headers.get('content-type');
+    if (contentType && contentType.includes('application/json')) {
+      return await response.json();
+    }
+    // Handle cases where the response is successful but not JSON.
+    // This might need adjustment based on what the API actually returns on success.
+    return {};
   } catch (error) {
     console.error('Error saving order:', error);
     throw error;
@@ -45,8 +57,22 @@ export interface Order {
 export const getOrders = async (): Promise<Order[]> => {
   try {
     const response = await fetch(`${API_URL}/orders`);
-    if (!response.ok) throw new Error('Failed to fetch orders');
-    return await response.json();
+    const contentType = response.headers.get('content-type');
+
+    if (!response.ok) {
+      let errorData;
+      if (contentType && contentType.includes('application/json')) {
+        errorData = await response.json();
+      }
+      throw new Error(
+        errorData?.message || `Failed to fetch orders: ${response.statusText}`
+      );
+    }
+
+    if (contentType && contentType.includes('application/json')) {
+      return await response.json();
+    }
+    return [];
   } catch (error) {
     console.error('Error fetching orders:', error);
     throw error;

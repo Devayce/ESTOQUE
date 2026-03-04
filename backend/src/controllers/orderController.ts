@@ -22,7 +22,26 @@ export const createOrder = async (req: Request, res: Response) => {
     }
 
     try {
-        const totalProfitFromSale = await prisma.$transaction(async (tx) => {
+        const result = await prisma.$transaction(async (tx) => {
+            // 1. Create the Order record
+            const order = await tx.order.create({
+                data: {
+                    customerName,
+                    discount,
+                    total,
+                    items: {
+                        create: items.map(item => ({
+                            productId: item.product.id,
+                            quantity: item.quantity,
+                            price: item.product.price, // Price at time of sale
+                        })),
+                    },
+                },
+                include: {
+                    items: true, // Include the created items in the response
+                }
+            });
+
             let accumulatedProfit = 0;
 
             for (const item of items) {
@@ -30,7 +49,7 @@ export const createOrder = async (req: Request, res: Response) => {
                 const salePrice = item.product.price;
                 const quantitySold = item.quantity;
 
-                // 1. Find the product and check stock
+                // 2. Find the product and check stock
                 const product = await tx.product.findUnique({
                     where: { id: productId },
                 });
@@ -42,70 +61,48 @@ export const createOrder = async (req: Request, res: Response) => {
                     throw new Error(`Insufficient stock for product ${product.name}.`);
                 }
 
-                // 2. Find the last "entry" movement to determine the cost basis
+                // 3. Find cost basis to calculate profit
                 const lastEntry = await tx.stockMovement.findFirst({
-                    where: {
-                        productId: productId,
-                        type: 'entry',
-                    },
-                    orderBy: {
-                        date: 'desc',
-                    },
+                    where: { productId: productId, type: 'entry' },
+                    orderBy: { date: 'desc' },
                 });
-
-                // If no entry, we can't determine profit. Assume cost is 0 or handle as an error.
-                // For this logic, we'll assume cost is 0 if no entry is found.
                 const costPrice = lastEntry?.unitPrice || 0;
                 
-                // 3. Calculate profit for this item
-                const profitPerItem = salePrice - costPrice;
-                accumulatedProfit += profitPerItem * quantitySold;
+                // 4. Calculate profit and update stock
+                accumulatedProfit += (salePrice - costPrice) * quantitySold;
 
-                // 4. Update product stock
                 await tx.product.update({
                     where: { id: productId },
-                    data: {
-                        stock: {
-                            decrement: quantitySold,
-                        },
-                    },
+                    data: { stock: { decrement: quantitySold } },
                 });
 
-                // 5. Create the "exit" stock movement
+                // 5. Create "exit" stock movement
                 await tx.stockMovement.create({
                     data: {
                         productId: productId,
                         type: 'exit',
                         quantity: quantitySold,
-                        unitPrice: salePrice, // The price it was sold at
+                        unitPrice: salePrice,
                     },
                 });
             }
 
-            // After iterating all items, apply discount to profit if necessary.
-            // A simple approach is to reduce profit by the same percentage as the discount.
             const finalProfit = accumulatedProfit * (1 - (discount || 0) / 100);
 
-            // 6. Update the global profit
+            // 6. Update global profit
             await tx.profit.upsert({
                 where: { id: 1 },
-                update: {
-                    total: {
-                        increment: finalProfit,
-                    },
-                },
-                create: {
-                    id: 1,
-                    total: finalProfit,
-                },
+                update: { total: { increment: finalProfit } },
+                create: { id: 1, total: finalProfit },
             });
 
-            return finalProfit;
+            return { order, profitFromSale: finalProfit };
         });
 
         res.status(201).json({ 
             message: 'Order created successfully!',
-            profitFromSale: totalProfitFromSale 
+            order: result.order,
+            profitFromSale: result.profitFromSale 
         });
 
     } catch (error) {
@@ -117,5 +114,22 @@ export const createOrder = async (req: Request, res: Response) => {
 
 // We will keep a simple getOrders for now, but it should be properly implemented
 export const getOrders = async (req: Request, res: Response) => {
-    res.status(501).json({ message: 'Not implemented yet.' });
+    try {
+        const orders = await prisma.order.findMany({
+            orderBy: {
+                date: 'desc',
+            },
+            include: {
+                items: {
+                    include: {
+                        product: true, // Include the full product details for each order item
+                    },
+                },
+            },
+        });
+        res.status(200).json(orders);
+    } catch (error) {
+        console.error('Failed to get orders:', error);
+        res.status(500).json({ error: 'Failed to retrieve orders.' });
+    }
 }

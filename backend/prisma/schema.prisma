@@ -26,6 +26,7 @@ model Product {
   image       String?
 
   movements StockMovement[]
+  orderItems OrderItem[]
 }
 
 model StockMovement {
@@ -35,20 +36,34 @@ model StockMovement {
   date      DateTime @default(now())
   unitPrice Float
 
-    product   Product @relation(fields: [productId], references: [id])
+  product   Product @relation(fields: [productId], references: [id])
+  productId Int
+}
 
-    productId Int
+model Order {
+  id           Int         @id @default(autoincrement())
+  customerName String
+  date         DateTime    @default(now())
+  total        Float
+  discount     Float
+  items        OrderItem[]
+}
 
-  }
+model OrderItem {
+  id        Int   @id @default(autoincrement())
+  quantity  Int
+  price     Float // Price at the time of sale
 
-  
+  order     Order   @relation(fields: [orderId], references: [id])
+  orderId   Int
+  product   Product @relation(fields: [productId], references: [id])
+  productId Int
+}
 
-  model Profit {
+model Profit {
+  id    Int   @id @default(1)
+  total Float
+}
 
-    id    Int   @id @default(1)
-
-    total Float
-
-  }
 
   
